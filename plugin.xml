@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <class>com.example.openfire.sessionmonitor.SessionMonitorPlugin</class>
+
+    <name>Session Monitor</name>
+    <description>Displays current Openfire client sessions and logs session lifecycle events.</description>
+    <author>rnamala</author>
+    <version>1.0.0</version>
+    <date>2026-08-18</date>
+    <minServerVersion>5.0.0</minServerVersion>
+    <licenseType>gpl</licenseType>
+    <csrfProtectionEnabled>true</csrfProtectionEnabled>
+
+    <adminconsole>
+        <tab id="tab-server">
+            <sidebar id="sidebar-server-settings">
+                <item id="session-monitor"
+                      name="Session Monitor"
+                      url="session-monitor.jsp"
+                      description="View current XMPP client sessions and session events."
+                      order="80"/>
+            </sidebar>
+        </tab>
+    </adminconsole>
+</plugin>
