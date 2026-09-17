@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.example.openfire</groupId>
-    <artifactId>sessionmonitor</artifactId>
+    <artifactId>session-monitor</artifactId>
     <version>1.0.0</version>
 
     <packaging>jar</packaging>
@@ -25,41 +25,38 @@
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--
+            The Openfire parent POM (org.igniterealtime.openfire:plugins) derives the
+            precompiled-JSP servlet package from this property
+            (org.jivesoftware.openfire.plugin.${plugin.name}), so it must be a valid
+            Java identifier. The Maven artifactId ('session-monitor') is used for the
+            plugin file name and may therefore contain dashes.
+        -->
+        <plugin.name>sessionmonitor</plugin.name>
     </properties>
 
     <build>
+        <!--
+            Compile directly into a root 'classes' folder, matching the layout that the
+            Openfire parent POM's shared 'openfire-plugin-assembly' descriptor expects
+            (pluginDir/plugin.xml, pluginDir/classes/, pluginDir/lib/, pluginDir/web/).
+        -->
+        <outputDirectory>classes</outputDirectory>
+
         <plugins>
-            <!-- Build the actual Openfire plugin assembly. -->
+            <!--
+                The Openfire parent POM defines this 'make-assembly' execution using the
+                official openfire-plugin-assembly descriptor. We only override the final
+                name so the generated plugin archive matches our artifact name.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.igniterealtime.openfire.plugins</groupId>
-                        <artifactId>openfire-plugin-assembly-descriptor</artifactId>
-                        <version>${openfire.version}</version>
-                    </dependency>
-                </dependencies>
-
                 <executions>
                     <execution>
                         <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-
                         <configuration>
-                            <appendAssemblyId>true</appendAssemblyId>
                             <finalName>${project.artifactId}</finalName>
-                            <attach>true</attach>
-
-                            <descriptorRefs>
-                                <descriptorRef>
-                                    openfire-plugin-assembly
-                                </descriptorRef>
-                            </descriptorRefs>
                         </configuration>
                     </execution>
                 </executions>
@@ -69,6 +66,46 @@
             <plugin>
                 <groupId>org.eclipse.jetty.ee8</groupId>
                 <artifactId>jetty-ee8-jspc-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- 'mvn clean' also removes the root classes/ build output -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>3.2.0</version>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>classes</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <!--
+                Recreate the tracked classes/.gitkeep placeholder right after 'mvn
+                clean' has removed the classes/ build output, so the folder remains
+                part of the project structure.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>ensure-classes-folder</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="classes"/>
+                                <touch file="classes/.gitkeep"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

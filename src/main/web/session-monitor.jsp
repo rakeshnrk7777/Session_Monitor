@@ -23,8 +23,12 @@
     }
 
     private String hostName(Session session) {
+        return SessionMonitorListener.resolveHostName(session);
+    }
+
+    private String hostAddress(Session session) {
         try {
-            return session.getHostName();
+            return session.getHostAddress();
         } catch (Exception e) {
             return "";
         }
@@ -94,21 +98,59 @@
     <meta charset="UTF-8"/>
     <title>Session Monitor</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .summary { margin: 12px 0; padding: 12px; background: #f5f5f5; border: 1px solid #ddd; }
-        .table-wrap { overflow-x: auto; }
-        table { border-collapse: collapse; width: 100%; font-size: 12px; }
-        th, td { border: 1px solid #ddd; padding: 6px; vertical-align: top; white-space: nowrap; }
-        th { background: #eee; position: sticky; top: 0; }
-        .small { font-size: 11px; color: #666; }
-        .event-created { background: #eef8ee; }
-        .event-destroyed { background: #fff0f0; }
-        .event-other { background: #fffbea; }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .summary {
+            margin: 12px 0;
+            padding: 12px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            vertical-align: top;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #eee;
+            position: sticky;
+            top: 0;
+        }
+
+        .small {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .event-created {
+            background: #eef8ee;
+        }
+
+        .event-destroyed {
+            background: #fff0f0;
+        }
+
+        .event-other {
+            background: #fffbea;
+        }
     </style>
 </head>
 <body>
-
-<admin:FlashMessage/>
 
 <h2>Openfire Client Session Monitor</h2>
 
@@ -162,44 +204,70 @@
                 String resource = "";
                 try {
                     resource = clientSession.getAddress().getResource();
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
 
                 String software = "";
                 try {
                     software = String.valueOf(clientSession.getSoftwareVersion());
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
 
                 String rowClass = clientSession.isClosed() ? "event-destroyed" : "";
         %>
         <tr class="<%= rowClass %>">
-            <td><%= ++row %></td>
-            <td><%= esc(jid) %></td>
-            <td><%= esc(username(clientSession)) %></td>
-            <td><%= esc(resource) %></td>
-            <td><%= esc(clientSession.getStreamID()) %></td>
-            <td><%= esc(clientSession.getHostAddress()) %></td>
-            <td><%= esc(hostName(clientSession)) %></td>
-            <td><%= esc(clientSession.getStatus()) %></td>
-            <td><%= clientSession.isAuthenticated() %></td>
-            <td><%= clientSession.isEncrypted() %></td>
-            <td><%= esc(clientSession.getTLSProtocolName()) %></td>
-            <td><%= esc(clientSession.getCipherSuiteName()) %></td>
-            <td><%= esc(fmt(clientSession.getCreationDate())) %></td>
-            <td><%= esc(fmt(clientSession.getLastActiveDate())) %></td>
-            <td><%= esc(duration(clientSession.getCreationDate())) %></td>
-            <td><%= esc(clientSession.getLanguage()) %></td>
-            <td><%= clientSession.getNumClientPackets() %></td>
-            <td><%= clientSession.getNumServerPackets() %></td>
-            <td><%= esc(software) %></td>
-            <td style="max-width:400px; white-space:normal"><%= esc(presenceInfo(clientSession)) %></td>
-            <td><%= clientSession.isClosed() %></td>
-            <td><%= clientSession.isDetached() %></td>
+            <td><%= ++row %>
+            </td>
+            <td><%= esc(jid) %>
+            </td>
+            <td><%= esc(username(clientSession)) %>
+            </td>
+            <td><%= esc(resource) %>
+            </td>
+            <td><%= esc(clientSession.getStreamID()) %>
+            </td>
+            <td><%= esc(hostAddress(clientSession)) %>
+            </td>
+            <td><%= esc(hostName(clientSession)) %>
+            </td>
+            <td><%= esc(clientSession.getStatus()) %>
+            </td>
+            <td><%= clientSession.isAuthenticated() %>
+            </td>
+            <td><%= clientSession.isEncrypted() %>
+            </td>
+            <td><%= esc(clientSession.getTLSProtocolName()) %>
+            </td>
+            <td><%= esc(clientSession.getCipherSuiteName()) %>
+            </td>
+            <td><%= esc(fmt(clientSession.getCreationDate())) %>
+            </td>
+            <td><%= esc(fmt(clientSession.getLastActiveDate())) %>
+            </td>
+            <td><%= esc(duration(clientSession.getCreationDate())) %>
+            </td>
+            <td><%= esc(clientSession.getLanguage()) %>
+            </td>
+            <td><%= clientSession.getNumClientPackets() %>
+            </td>
+            <td><%= clientSession.getNumServerPackets() %>
+            </td>
+            <td><%= esc(software) %>
+            </td>
+            <td style="max-width:400px; white-space:normal"><%= esc(presenceInfo(clientSession)) %>
+            </td>
+            <td><%= clientSession.isClosed() %>
+            </td>
+            <td><%= clientSession.isDetached() %>
+            </td>
         </tr>
         <%
             }
             if (sortedSessions.isEmpty()) {
         %>
-        <tr><td colspan="22">No authenticated client sessions are currently connected.</td></tr>
+        <tr>
+            <td colspan="22">No authenticated client sessions are currently connected.</td>
+        </tr>
         <%
             }
         %>
@@ -239,26 +307,42 @@
                         : "event-other";
         %>
         <tr class="<%= cls %>">
-            <td><%= esc(event.timestamp) %></td>
-            <td><strong><%= esc(event.eventType) %></strong></td>
-            <td><%= esc(event.address) %></td>
-            <td><%= esc(event.hostAddress) %></td>
-            <td><%= esc(event.streamId) %></td>
-            <td><%= esc(event.status) %></td>
-            <td><%= esc(event.creationDate) %></td>
-            <td><%= esc(event.lastActiveDate) %></td>
-            <td><%= event.encrypted %></td>
-            <td><%= esc(event.tlsProtocol) %></td>
-            <td><%= esc(event.cipherSuite) %></td>
-            <td><%= event.clientPackets %></td>
-            <td><%= event.serverPackets %></td>
-            <td><%= esc(event.softwareVersion) %></td>
+            <td><%= esc(event.timestamp) %>
+            </td>
+            <td><strong><%= esc(event.eventType) %>
+            </strong></td>
+            <td><%= esc(event.address) %>
+            </td>
+            <td><%= esc(event.hostAddress) %>
+            </td>
+            <td><%= esc(event.streamId) %>
+            </td>
+            <td><%= esc(event.status) %>
+            </td>
+            <td><%= esc(event.creationDate) %>
+            </td>
+            <td><%= esc(event.lastActiveDate) %>
+            </td>
+            <td><%= event.encrypted %>
+            </td>
+            <td><%= esc(event.tlsProtocol) %>
+            </td>
+            <td><%= esc(event.cipherSuite) %>
+            </td>
+            <td><%= event.clientPackets %>
+            </td>
+            <td><%= event.serverPackets %>
+            </td>
+            <td><%= esc(event.softwareVersion) %>
+            </td>
         </tr>
         <%
             }
             if (events.isEmpty()) {
         %>
-        <tr><td colspan="14">No lifecycle events have been captured since the plugin started.</td></tr>
+        <tr>
+            <td colspan="14">No lifecycle events have been captured since the plugin started.</td>
+        </tr>
         <%
             }
         %>

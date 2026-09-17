@@ -19,6 +19,11 @@
                       url="session-monitor.jsp"
                       description="View current XMPP client sessions and session events."
                       order="80"/>
+                <item id="server-info"
+                      name="Server Info"
+                      url="server-info.jsp"
+                      description="View server uptime, start time and which connections the server initiated."
+                      order="85"/>
             </sidebar>
         </tab>
     </adminconsole>

@@ -9,15 +9,17 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Deque;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 /**
  * Captures XMPP client session lifecycle events.
- *
+ * <p>
  * Openfire 5.0.0 SessionEventListener provides:
  * sessionCreated, sessionDestroyed, anonymousSessionCreated,
  * anonymousSessionDestroyed and resourceBound.
@@ -28,6 +30,25 @@ public class SessionMonitorListener implements SessionEventListener {
             LoggerFactory.getLogger(SessionMonitorListener.class);
 
     private static final int MAX_EVENTS = 1000;
+
+    /**
+     * Bound on the reverse-DNS cache, to prevent unbounded growth on long-running
+     * servers that see many distinct client IP addresses.
+     */
+    private static final int MAX_HOST_ENTRIES = 2048;
+
+    /**
+     * Cache of reverse-DNS lookups, keyed by the client IP address. Reverse DNS can
+     * block for seconds, so caching keeps it off both the session-event dispatch
+     * path (listeners run on core server threads) and repeated page loads.
+     */
+    private static final Map<String, String> HOST_NAME_CACHE =
+            Collections.synchronizedMap(new LinkedHashMap<>(32, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+                    return size() > MAX_HOST_ENTRIES;
+                }
+            });
 
     private final Deque<SessionEvent> events = new ArrayDeque<>();
 
@@ -66,7 +87,7 @@ public class SessionMonitorListener implements SessionEventListener {
             events.removeLast();
         }
 
-        Log.info(
+        Log.debug(
                 "SESSION_EVENT type={} jid={} ip={} streamId={} status={} " +
                         "created={} lastActive={} encrypted={} tls={} cipher={} " +
                         "clientPackets={} serverPackets={}",
@@ -97,6 +118,51 @@ public class SessionMonitorListener implements SessionEventListener {
      */
     public synchronized void clear() {
         events.clear();
+    }
+
+    /**
+     * Resolves the reverse-DNS host name for the IP address of the provided session.
+     * <p>
+     * Reverse-DNS lookups can block for seconds, so results are cached in a bounded
+     * LRU cache keyed by the session's IP address. This keeps DNS traffic off the
+     * session-event dispatch path (session listeners run on core server threads) and
+     * speeds up repeated admin-console page loads.
+     *
+     * @param session the session to resolve a host name for.
+     * @return the resolved host name, or the string {@code UNKNOWN} when the host
+     * could not be determined.
+     */
+    public static String resolveHostName(Session session) {
+        String hostAddress;
+        try {
+            hostAddress = session.getHostAddress();
+        } catch (UnknownHostException e) {
+            Log.debug("Unable to resolve host address for session {}", session.getAddress(), e);
+            return "UNKNOWN";
+        }
+
+        synchronized (HOST_NAME_CACHE) {
+            final String cached = HOST_NAME_CACHE.get(hostAddress);
+            if (cached != null) {
+                return cached;
+            }
+        }
+
+        String hostName;
+        try {
+            hostName = session.getHostName();
+        } catch (UnknownHostException e) {
+            Log.debug("Unable to resolve host name for session {}", session.getAddress(), e);
+            return "UNKNOWN";
+        }
+        if (hostName == null || hostName.isEmpty()) {
+            return "UNKNOWN";
+        }
+
+        synchronized (HOST_NAME_CACHE) {
+            HOST_NAME_CACHE.put(hostAddress, hostName);
+        }
+        return hostName;
     }
 
     public static final class SessionEvent {
@@ -178,7 +244,7 @@ public class SessionMonitorListener implements SessionEventListener {
                     safe(s.getStreamID()),
 
                     safeHostAddress(s),
-                    safeHostName(s),
+                    resolveHostName(s),
 
                     safe(s.getServerName()),
                     safe(s.getStatus()),
@@ -231,26 +297,6 @@ public class SessionMonitorListener implements SessionEventListener {
 
                 Log.debug(
                         "Unable to resolve host address for session {}",
-                        safe(s.getAddress()),
-                        e
-                );
-
-                return "UNKNOWN";
-            }
-        }
-
-        /**
-         * Session.getHostName() can throw UnknownHostException.
-         */
-        private static String safeHostName(Session s) {
-
-            try {
-                return safe(s.getHostName());
-
-            } catch (UnknownHostException e) {
-
-                Log.debug(
-                        "Unable to resolve host name for session {}",
                         safe(s.getAddress()),
                         e
                 );

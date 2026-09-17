@@ -1,6 +1,10 @@
 # Build output
 target/
 
+# Generated Openfire plugin build output (maven outputDirectory = 'classes')
+classes/*
+!classes/.gitkeep
+
 # IDE
 .idea/
 *.iml

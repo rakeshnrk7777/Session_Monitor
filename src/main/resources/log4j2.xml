@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <RollingFile name="session-monitor"
+                     fileName="${sys:openfireHome}/logs/session-monitor.log"
+                     filePattern="${sys:openfireHome}/logs/session-monitor.%i.log.zip">
+            <PatternLayout>
+                <pattern>%d %-5p [%c{1}] - %m%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!--
+            Openfire 5.0.0 detects this file at <pluginDir>/classes/log4j2.xml and uses it as
+            a dedicated logger context for this plugin's classes (see PluginManager).
+            Session lifecycle events are logged at DEBUG level, so keep this logger at DEBUG
+            or TRACE if you want them captured in session-monitor.log.
+        -->
+        <Logger name="root" level="debug">
+            <appender-ref ref="session-monitor"/>
+        </Logger>
+    </Loggers>
+</Configuration>
