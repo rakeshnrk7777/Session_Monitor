@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Session Monitor Plugin Readme</title>
+</head>
+<body>
+<h1>Session Monitor Readme</h1>
+
+<h2>Overview</h2>
+<p>
+    The Session Monitor plugin records the XMPP client sessions that are
+    currently connected to Openfire. For each authenticated session the Session
+    Monitor admin page shows:
+</p>
+<ul>
+    <li>The JID, username and resource.</li>
+    <li>The stream ID, and the client IP address/hostname and TCP ports.</li>
+    <li>The session status and authentication state.</li>
+    <li>The TLS protocol and cipher suite in use, when the session is encrypted.</li>
+    <li>The session creation and last-active timestamps, and the current session duration.</li>
+    <li>The client and server packet counters, and the client's language.</li>
+    <li>The XEP-0092 software-version information reported by the client.</li>
+    <li>The current presence, and the detached/closed state.</li>
+</ul>
+<p>
+    The plugin also records session lifecycle events
+    (<code>SESSION_CREATED</code>, <code>SESSION_DESTROYED</code>,
+    <code>ANONYMOUS_SESSION_CREATED</code>, <code>ANONYMOUS_SESSION_DESTROYED</code>
+    and <code>RESOURCE_BOUND</code>). The last 1000 events are retained in memory
+    and shown at the bottom of the Session Monitor page. Lifecycle events are also
+    written to <code>session-monitor.log</code> so they can be inspected offline.
+</p>
+<p>
+    A dedicated Server Info page shows the server uptime and start time, and which
+    connections were initiated by the server (outbound server-to-server and client
+    connections) versus those that were initiated remotely (inbound sessions and
+    external components). The page also keeps a boot/restart history that survives
+    Openfire restarts.
+</p>
+
+<h2>Installation</h2>
+<p>
+    Copy <code>session-monitor.jar</code> into the <code>plugins</code> directory
+    of your Openfire installation. The plugin will then be automatically deployed.
+    To upgrade to a new version, copy the new <code>session-monitor.jar</code> file
+    over the existing file.
+</p>
+<p>
+    This plugin requires Openfire 5.0.0 or later.
+</p>
+
+<h2>Configuration</h2>
+<p>
+    No configuration is required: the plugin is active as soon as it is deployed.
+    The plugin adds two pages to the admin console:
+</p>
+<ul>
+    <li><strong>Server &gt; Server Settings &gt; Session Monitor</strong> &mdash; the live
+        session inventory and the most recent lifecycle events.</li>
+    <li><strong>Server &gt; Server Settings &gt; Server Info</strong> &mdash; server
+        uptime and start time, the connection overview, and the boot/restart history.</li>
+</ul>
+<p>
+    The plugin maintains the following log files:
+</p>
+<ul>
+    <li><code>logs/session-monitor.log</code> &mdash; plugin load/stop messages and session
+        lifecycle events (logged at Debug level). The file rolls at 10&nbsp;MB and up to 50
+        rolled files are kept.</li>
+    <li><code>logs/server-info.log</code> &mdash; one
+        <code>SERVER_START</code>/<code>SERVER_STOP</code> record per boot, used by the
+        Server Info page to render the boot/restart history.</li>
+</ul>
+
+<h2>Warning</h2>
+<p>
+    The session details recorded by this plugin are not obfuscated in any way. The
+    Session Monitor page and <code>session-monitor.log</code> expose the usernames,
+    JIDs, IP addresses and connection details of connected users. Restrict access to
+    the admin console and protect the generated log files accordingly. The event
+    history is kept in memory only and is cleared when the plugin or Openfire
+    restarts.
+</p>
+</body>
+</html>

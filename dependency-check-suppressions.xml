@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://dependency-check.github.io/DependencyCheck/suppression.xsd"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://dependency-check.github.io/DependencyCheck/suppression.xsd https://dependency-check.github.io/DependencyCheck/suppression.xsd">
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 1 MEDIUM: CVE-2025-48924 (fixed upstream in commons-lang3 3.18.0).
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>org.apache.commons:commons-lang3:3.9</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 8 findings incl. CRITICAL CVE-2026-2332 (HTTP/1.1 request
+            smuggling) and CVE-2026-10050. Fixed upstream in Jetty 12.0.33 / 12.1.7.
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>org.eclipse.jetty.websocket:jetty-websocket-core-common:12.0.22</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 8 findings incl. CRITICAL CVE-2026-2332 (HTTP/1.1 request
+            smuggling) and CVE-2026-10050. Fixed upstream in Jetty 12.0.33 / 12.1.7.
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>org.eclipse.jetty.websocket:jetty-websocket-core-server:12.0.22</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 3 MEDIUM findings: CVE-2026-34479, CVE-2026-34477,
+            CVE-2026-49844. Fixed upstream in log4j 2.25.x (CVE-2026-34479 -> 2.25.4).
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>org.apache.logging.log4j:log4j-api:2.20.0</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 5 MEDIUM findings: CVE-2026-34479, CVE-2026-34480,
+            CVE-2025-68161, CVE-2026-34477, CVE-2026-49844. Fixed upstream in log4j 2.25.x.
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>org.apache.logging.log4j:log4j-core:2.20.0</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 54 findings (6 CRITICAL incl. CVE-2026-45674, CVE-2026-47691,
+            CVE-2026-42581). Fixed upstream in netty 4.1.135.Final / 4.2.15.Final.
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>io.netty:netty-codec-mqtt:4.1.118.Final</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 54 findings (6 CRITICAL incl. CVE-2026-45674, CVE-2026-47691,
+            CVE-2026-42581). Fixed upstream in netty 4.1.135.Final / 4.2.15.Final.
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>io.netty:netty-codec-memcache:4.1.118.Final</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 54 findings (6 CRITICAL incl. CVE-2026-45674, CVE-2026-47691,
+            CVE-2026-42581). Fixed upstream in netty 4.1.135.Final / 4.2.15.Final.
+            Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>io.netty:netty-transport:4.1.118.Final</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 2 HIGH findings: CVE-2026-42198 (fixed in 42.7.11),
+            CVE-2026-54291 (fixed in 42.7.12). Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>org.postgresql:postgresql:42.7.7</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+    <suppress>
+        <notes><![CDATA[
+            Provided-scope transitive dependency of org.igniterealtime.openfire:xmppserver:5.0.0;
+            not bundled in this plugin. 1 MEDIUM finding: CVE-2026-21999 (Oracle XML Database).
+            Remediation via Oracle Critical Patch Update (Apr 2026). Tracked in VULNERABILITY_TRACKING.md.
+        ]]></notes>
+        <gav>com.oracle.database.xml:xdb:23.7.0.25.01</gav>
+        <vulnerabilityName regex="true">.*</vulnerabilityName>
+    </suppress>
+
+</suppressions>

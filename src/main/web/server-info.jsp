@@ -10,8 +10,8 @@
 <%@ page import="org.jivesoftware.openfire.session.OutgoingServerSession" %>
 <%@ page import="org.jivesoftware.openfire.session.ServerSession" %>
 <%@ page import="org.jivesoftware.openfire.session.Session" %>
-<%@ page import="com.example.openfire.sessionmonitor.ServerInfoLog" %>
-<%@ page import="com.example.openfire.sessionmonitor.SessionMonitorPlugin" %>
+<%@ page import="com.comitfs.openfire.sessionmonitor.ServerInfoLog" %>
+<%@ page import="com.comitfs.openfire.sessionmonitor.SessionMonitorPlugin" %>
 <%@ taglib uri="admin" prefix="admin" %>
 
 <%!

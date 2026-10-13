@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Session Monitor Change Log</title>
+</head>
+<body>
+<h1>Session Monitor Changelog</h1>
+
+<p><b>1.0.0</b> (August 18, 2026) &mdash; initial release.</p>
+<ul>
+    <li>Initial release of the Session Monitor plugin for Openfire 5.0.0.</li>
+    <li>Live inventory of current XMPP client sessions, including JID, username,
+        resource, stream ID, client IP/hostname, TCP ports, session status,
+        authentication state, TLS protocol/cipher, creation and last-active
+        timestamps, session duration, client/server packet counters, language,
+        XEP-0092 software-version information, presence, and detached/closed state.</li>
+    <li>Session lifecycle events (<code>SESSION_CREATED</code>, <code>SESSION_DESTROYED</code>,
+        <code>ANONYMOUS_SESSION_CREATED</code>, <code>ANONYMOUS_SESSION_DESTROYED</code>,
+        <code>RESOURCE_BOUND</code>) are shown in the admin console and
+        written to <code>session-monitor.log</code>.</li>
+    <li>Dedicated Server Info page with server uptime, start time and a
+        boot/restart timestamp history that survives restarts.</li>
+</ul>
+
+<!-- Newest entries at the top; keep older entries below. -->
+</body>
+</html>

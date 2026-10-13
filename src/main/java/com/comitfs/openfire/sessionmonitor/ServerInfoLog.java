@@ -1,4 +1,4 @@
-package com.example.openfire.sessionmonitor;
+package com.comitfs.openfire.sessionmonitor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

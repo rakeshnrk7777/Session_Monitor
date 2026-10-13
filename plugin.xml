@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-    <class>com.example.openfire.sessionmonitor.SessionMonitorPlugin</class>
+    <class>com.comitfs.openfire.sessionmonitor.SessionMonitorPlugin</class>
 
     <name>Session Monitor</name>
-    <description>Displays current Openfire client sessions and logs session lifecycle events.</description>
-    <author>rnamala</author>
-    <version>1.0.0</version>
+    <description>Displays current Openfire client sessions and logs session lifecycle events. Provides a live XMPP session inventory, server info and an in-memory event history.</description>
+    <author>NRK_Testing</author>
+    <version>${project.version}</version>
     <date>2026-08-18</date>
     <minServerVersion>5.0.0</minServerVersion>
     <licenseType>gpl</licenseType>

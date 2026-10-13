@@ -1,4 +1,4 @@
-package com.example.openfire.sessionmonitor;
+package com.comitfs.openfire.sessionmonitor;
 
 import org.jivesoftware.openfire.XMPPServer;
 import org.jivesoftware.openfire.container.Plugin;

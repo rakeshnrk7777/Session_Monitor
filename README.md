@@ -66,6 +66,22 @@ Restart Openfire or use the Openfire plugin manager.
 > Openfire parent POM for the precompiled-JSP servlet package) is `sessionmonitor`,
 > because Java package names may not contain dashes.
 
+## Security scanning
+
+The build runs OWASP Dependency-Check at the `verify` phase and writes
+`target/dependency-check-report.html` and `target/dependency-check-report.json`:
+
+```bash
+mvn verify
+```
+
+All current findings are on `provided`-scope transitive dependencies of the Openfire
+5.0.0 platform (netty, Jetty, log4j, pgjdbc, commons-lang3, Oracle XML DB) — none of
+which are bundled inside this plugin. They are acknowledged in
+`dependency-check-suppressions.xml` and tracked with their upstream fix versions in
+`VULNERABILITY_TRACKING.md`. The build fails on any *remaining* (non-suppressed)
+finding with a CVSS score >= 8.0.
+
 ## Admin Console
 
 The plugin adds:

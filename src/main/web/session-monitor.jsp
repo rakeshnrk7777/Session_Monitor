@@ -3,7 +3,8 @@
 <%@ page import="org.jivesoftware.openfire.SessionManager" %>
 <%@ page import="org.jivesoftware.openfire.session.ClientSession" %>
 <%@ page import="org.jivesoftware.openfire.session.Session" %>
-<%@ page import="com.example.openfire.sessionmonitor.SessionMonitorListener" %>
+<%@ page import="com.comitfs.openfire.sessionmonitor.SessionMonitorListener" %>
+<%@ page import="com.comitfs.openfire.sessionmonitor.SessionMonitorPlugin" %>
 <%@ taglib uri="admin" prefix="admin" %>
 
 <%!
@@ -69,8 +70,8 @@
         for (org.jivesoftware.openfire.container.Plugin plugin :
                 org.jivesoftware.openfire.XMPPServer.getInstance()
                         .getPluginManager().getPlugins()) {
-            if (plugin instanceof com.example.openfire.sessionmonitor.SessionMonitorPlugin) {
-                monitor = ((com.example.openfire.sessionmonitor.SessionMonitorPlugin) plugin).getListener();
+            if (plugin instanceof SessionMonitorPlugin) {
+                monitor = ((SessionMonitorPlugin) plugin).getListener();
                 break;
             }
         }

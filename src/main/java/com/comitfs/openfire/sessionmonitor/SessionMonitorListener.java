@@ -1,4 +1,4 @@
-package com.example.openfire.sessionmonitor;
+package com.comitfs.openfire.sessionmonitor;
 
 import org.jivesoftware.openfire.event.SessionEventListener;
 import org.jivesoftware.openfire.session.Session;
@@ -26,8 +26,8 @@ import java.util.Map;
  */
 public class SessionMonitorListener implements SessionEventListener {
 
-    private static final Logger Log =
-            LoggerFactory.getLogger(SessionMonitorListener.class);
+
+    private static final Logger Log = LoggerFactory.getLogger(SessionMonitorListener.class);
 
     private static final int MAX_EVENTS = 1000;
 
